@@ -197,7 +197,7 @@ function getRiskLabel(score) {
 function computeDrivers(patient) {
   const noshow  = parseFloat(patient.previous_noshow_count);
   const dist    = parseFloat(patient.distance_from_hospital_km);
-  const auth    = parseInt(patient.has_active_insurance_authorisation);
+  const auth    = patient.has_active_insurance_authorisation === 'True' || patient.has_active_insurance_authorisation === '1' || patient.has_active_insurance_authorisation === 1 ? 1 : 0;
   const portal  = parseInt(patient.portal_logins_last_30_days || 0);
   const ecog    = parseInt(patient.ecog_performance_status);
   const balance = parseFloat(patient.outstanding_balance_usd || 0);
@@ -309,7 +309,7 @@ const TOOLS = [
 function executeTool(toolName, toolInput, patient, riskScore) {
   const days  = parseInt(patient.days_since_last_appointment || 0);
   const dist  = parseFloat(patient.distance_from_hospital_km);
-  const auth  = parseInt(patient.has_active_insurance_authorisation);
+  const auth  = patient.has_active_insurance_authorisation === 'True' || patient.has_active_insurance_authorisation === '1' || patient.has_active_insurance_authorisation === 1 ? 1 : 0;
 
   switch (toolName) {
     case 'check_appointment_status':
