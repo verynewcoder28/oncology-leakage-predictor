@@ -1,0 +1,6 @@
+.env
+node_modules/
+dist/
+intervention_log.json
+training_data.csv
+scoring_data.csv
