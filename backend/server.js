@@ -176,7 +176,6 @@ function rowToCSV(patient) {
 
 async function callDataRobot(patient) {
   const csvString = rowToCSV(patient);
-  console.log('[DataRobot] Sending CSV:\n', csvString);
   const response = await axios.post(DR_URL, csvString, {
     headers: {
       Authorization: `Bearer ${process.env.DATAROBOT_API_KEY}`,
