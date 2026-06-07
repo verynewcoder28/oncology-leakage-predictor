@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import AgentPanel from './AgentPanel'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+
 const RISK_CONFIG = {
   'High Risk': {
     badge: 'bg-red-600 text-white',
@@ -27,7 +29,7 @@ export default function PatientCard({ patient }) {
   const [agentResult, setAgentResult] = useState(null)
 
   useEffect(() => {
-    fetch(`http://localhost:3001/api/predict/${patient.patient_id}`, { method: 'POST' })
+    fetch(`${API_URL}/api/predict/${patient.patient_id}`, { method: 'POST' })
       .then(r => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`)
         return r.json()
@@ -47,7 +49,7 @@ export default function PatientCard({ patient }) {
     setAgentResult(null)
     try {
       const res = await fetch(
-        `http://localhost:3001/api/agent/run/${patient.patient_id}`,
+        `${API_URL}/api/agent/run/${patient.patient_id}`,
         { method: 'POST' }
       )
       const data = await res.json()

@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react'
 import PatientCard from './components/PatientCard'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+
 export default function App() {
   const [patients, setPatients] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/patients')
+    fetch(`${API_URL}/api/patients`)
       .then(r => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`)
         return r.json()
@@ -53,7 +55,6 @@ export default function App() {
           <div className="rounded-xl bg-red-950/60 border border-red-800 px-6 py-4 text-red-300">
             <p className="font-medium">Failed to load patients</p>
             <p className="mt-1 text-sm text-red-400">{error}</p>
-            <p className="mt-2 text-xs text-red-500">Make sure the backend is running on port 3001.</p>
           </div>
         )}
 
