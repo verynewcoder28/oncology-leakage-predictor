@@ -11,7 +11,7 @@ const OpenAI = require('openai');
 const app = express();
 const PORT = 3001;
 
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors({ origin: ['http://localhost:5173', 'https://oncology-leakage-predictor.netlify.app'] }));
 app.use(express.json());
 
 // ── Constants ─────────────────────────────────────────────────────────────────
