@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import posthog from 'posthog-js'
 import AgentPanel from './AgentPanel'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
@@ -45,6 +46,11 @@ export default function PatientCard({ patient }) {
   }, [patient.patient_id])
 
   const activateAgent = async () => {
+    posthog.capture('agent_activated', {
+      patient_id: patient.patient_id,
+      risk_label: risk?.risk_label,
+      risk_score: risk?.risk_score,
+    })
     setAgentState('loading')
     setAgentResult(null)
     try {
