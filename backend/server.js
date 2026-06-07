@@ -18,19 +18,49 @@ app.use(express.json());
 
 //const DR_URL = 'https://app.datarobot.com/api/v2/deployments/6a247cf27e20a7c354ac5475/predictions';
 const DR_URL = 'https://app.datarobot.com/api/v2/deployments/6a250f0a89ec1ac9379b97f8/predictions';
-const PATIENT_INDICES = [157, 16, 110];
-const PATIENT_FIELDS = [
-  'patient_id', 'cancer_type', 'previous_noshow_count',
-  'has_active_insurance_authorisation', 'distance_from_hospital_km',
-  'ecog_performance_status', 'appointment_type', 'days_since_last_appointment',
-  'portal_logins_last_30_days', 'call_answered',
+const HARDCODED_PATIENTS = [
+  {
+    patient_id: 'PAT-050158',
+    cancer_type: 'oral_head_neck',
+    previous_noshow_count: '10',
+    has_active_insurance_authorisation: 'False',
+    distance_from_hospital_km: '162.2',
+    ecog_performance_status: '2',
+    appointment_type: 'in_person',
+    days_since_last_appointment: '13',
+    portal_logins_last_30_days: '2',
+    call_answered: 'True',
+  },
+  {
+    patient_id: 'PAT-050017',
+    cancer_type: 'oral_head_neck',
+    previous_noshow_count: '3',
+    has_active_insurance_authorisation: 'False',
+    distance_from_hospital_km: '12.4',
+    ecog_performance_status: '1',
+    appointment_type: 'in_person',
+    days_since_last_appointment: '135',
+    portal_logins_last_30_days: '3',
+    call_answered: 'True',
+  },
+  {
+    patient_id: 'PAT-050111',
+    cancer_type: 'breast',
+    previous_noshow_count: '0',
+    has_active_insurance_authorisation: 'True',
+    distance_from_hospital_km: '3.7',
+    ecog_performance_status: '0',
+    appointment_type: 'in_person',
+    days_since_last_appointment: '18',
+    portal_logins_last_30_days: '18',
+    call_answered: 'No',
+  },
 ];
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function loadCSV() {
-  const content = fs.readFileSync(path.join(__dirname, '../scoring_data.csv'), 'utf8');
-  return parse(content, { columns: true, skip_empty_lines: true });
+  return HARDCODED_PATIENTS;
 }
 
 function rowToCSV(patient) {
@@ -265,17 +295,7 @@ async function runAgentLoop(patient, riskScore, riskLabel) {
 // ── Routes ────────────────────────────────────────────────────────────────────
 
 app.get('/api/patients', (req, res) => {
-  try {
-    const records  = loadCSV();
-    const patients = PATIENT_INDICES.map(idx => {
-      const row = records[idx];
-      return Object.fromEntries(PATIENT_FIELDS.map(f => [f, row[f]]));
-    });
-    res.json(patients);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
-  }
+  res.json(HARDCODED_PATIENTS);
 });
 
 app.post('/api/predict/:patientId', async (req, res) => {
